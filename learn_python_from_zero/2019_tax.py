@@ -33,7 +33,7 @@ def main():
     while i < 13:
         income_per_month_list.append(15000)
         i += 1
-    income_per_month_list[12] = 50000
+    #income_per_month_list[12] = 50000
     tax_per_month_old = 0
     tax_per_month_new = 0
     tax_per_month_list_old = [0]
