@@ -2,6 +2,7 @@
 # #coding=utf-8
 
 class BinaryNode:
+
     def __init__(self, data):
         self.data = data
 
@@ -23,8 +24,8 @@ class BinaryTree:
         self.max_node_num = max_node_num
         # if the valid node pos == max_node_num, it means the tree is full
         self.valid_node_pos = 0
-        head_node = BinaryNode('HEAD')
-        self.list.append(head_node)
+        # head_node = BinaryNode('HEAD')
+        # self.list.append(head_node)
 
     # create the binary tree with pre order method
     def PreordCreateBiTree(self, prenode, left_flag, right_flag):
@@ -58,7 +59,7 @@ class BinaryTree:
 
     # Thread the binary tree with pre order method
     def PreordThreadBitree(self, prenode, cur_pos):
-        list_len = len(self.list) - 1
+        list_len = len(self.list)
         if cur_pos < list_len:
             cur_node = self.list[cur_pos]
             if cur_node != None:
@@ -73,6 +74,18 @@ class BinaryTree:
                 cur_pos += 1
                 self.PreordThreadBitree(cur_node, cur_pos)
 
+    # Traverse the binary tree with the pre order method
+    def PreordTraverse(self, pos):
+        cur_pos = pos
+        if cur_pos != -1:
+            cur_node = self.list[cur_pos]
+            print(cur_node.data)
+            if cur_node.ltag == 'child':
+                cur_pos = cur_node.lpos
+            else:
+                cur_pos = cur_node.rpos
+            self.PreordTraverse(cur_pos)
+
 
     # create the binary tree with mid order method
     def MidordCreateBiTree(self):
@@ -80,17 +93,7 @@ class BinaryTree:
     # create the binary tree with post order method
     def PostordCreateBiTree(self):
         pass
-    # Traverse the binary tree with the pre order method
-    def PreordTraverse(self):
-        head_node = self.list[0]
-        cur_pos = head_node.lpos
-        cur_node = self.list[cur_pos]
-        while cur_pos != -1:
-            print(cur_node.data)
-            if cur_node.lpos == 'thread':
-                cur_pos = cur_node.lpos
-                cur_node = self.list[cur_pos]
-                print(cur_node.data)
+
 
     # Traverse the binary tree with the mid order method
     def MidordTraverse(self):
@@ -119,3 +122,4 @@ if __name__ == '__main__':
     BiTree1.PrintBiTree()
     BiTree1.PreordThreadBitree(None,0)
     BiTree1.PrintBiTree()
+    BiTree1.PreordTraverse(0)
