@@ -5,7 +5,8 @@ class BinaryNode:
 
     def __init__(self, data):
         self.data = data
-
+        # indicate the position (list index) of the current node
+        self.pos = 0
         # indicate the position of the left child or the position of the pre-node
         self.lpos = -1
         # indicate the position of the right child or the position of the post-node
@@ -26,6 +27,12 @@ class BinaryTree:
         self.valid_node_pos = 0
         # head_node = BinaryNode('HEAD')
         # self.list.append(head_node)
+        # the root_node is used to indicate the the pos of the root node, the method for the binary tree always
+        # start from the root node. By default, we use pre order method to save the nodes in the list, so the position
+        # of the root node is 0
+        self.root_node_pos = 0
+        # the pre_node is used in the traverse method to indicate the pre node
+        self.pre_node_pos = -1
 
     # create the binary tree with pre order method
     def PreordCreateBiTree(self, prenode, left_flag, right_flag):
@@ -38,6 +45,7 @@ class BinaryTree:
             pos = self.valid_node_pos
             new_node = BinaryNode(ch)
             print('new node {} is generated, the pos is {}'.format(ch, pos))
+            new_node.pos = pos
             self.list.append(new_node)
             self.valid_node_pos += 1
             if self.valid_node_pos >= self.max_node_num:
@@ -96,8 +104,52 @@ class BinaryTree:
 
 
     # Traverse the binary tree with the mid order method
-    def MidordTraverse(self):
-        pass
+    def MidordThreadBitree(self, node):
+        # MidordTraverse the left subtree
+        if node.lpos >= 0 and node.ltag == 'child':
+            left_child = self.list[node.lpos]
+            self.MidordThreadBitree(left_child)
+        # process the current node
+        if node.lpos == -1:
+            # current node has no left child
+            node.lpos = self.pre_node_pos
+            node.ltag = 'thread'
+        if self.pre_node_pos != -1:
+            pre_node = self.list[self.pre_node_pos]
+        else:
+            pre_node = None
+        if pre_node != None and pre_node.rpos == -1:
+            pre_node.rpos = node.pos
+            pre_node.rtag = 'thread'
+
+        # make the current node as the pre node
+        self.pre_node_pos = node.pos
+
+        # MidordTraverse the right subtree
+        if node.rpos >= 0 and node.rtag == 'child':
+            right_child = self.list[node.rpos]
+            self.MidordThreadBitree(right_child)
+
+    def MidOrdTraverse(self,pos):
+        if pos != -1:
+            cur_node = self.list[pos]
+            if cur_node.ltag == 'child' and cur_node.lpos != -1:
+                self.MidOrdTraverse(cur_node.lpos)
+            print(cur_node.data)
+            if cur_node.rtag == 'child' and cur_node.rpos != -1:
+                self.MidOrdTraverse(cur_node.rpos)
+
+    def MidOrdTraverseByThread(self, cur_node_pos):
+        while cur_node_pos != -1:
+            cur_node = self.list[cur_node_pos]
+            while cur_node.ltag == 'child' and cur_node.lpos != -1:
+                cur_node = self.list[cur_node.lpos]
+            print(cur_node.data)
+            cur_node_pos = cur_node.rpos
+
+
+
+
     # Traverse the binary tree with the post order method
     def PostordTraverse(self):
         pass
@@ -120,6 +172,17 @@ if __name__ == '__main__':
     BiTree1 = BinaryTree(lt, 10)
     BiTree1.PreordCreateBiTree(None, 'false', 'false')
     BiTree1.PrintBiTree()
-    BiTree1.PreordThreadBitree(None,0)
+    # BiTree1.PreordThreadBitree(None,0)
+    # BiTree1.PrintBiTree()
+    # BiTree1.PreordTraverse(0)
+
+    #
+    print("After Mid order thread\n")
+    BiTree1.MidordThreadBitree(BiTree1.list[BiTree1.root_node_pos])
     BiTree1.PrintBiTree()
-    BiTree1.PreordTraverse(0)
+    print("\n")
+    print("Begin to traverse the tree by mid order\n")
+    BiTree1.MidOrdTraverse(BiTree1.root_node_pos)
+    print('\n')
+    print("Begin to travese the tree by mid order with thread")
+    BiTree1.MidOrdTraverseByThread(BiTree1.root_node_pos)
