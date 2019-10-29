@@ -198,6 +198,17 @@ class single_link_list:
         self.header = new_list_header
         return
 
+    def revert_instance2(self):
+        cur = self.header
+        prev = None
+        while cur is not None:
+            next = cur.next
+            cur.next = prev
+            prev = cur
+            cur = next
+        self.header = self.tailer
+
+
     def __repr__(self):
         vals = []
         num = 0
@@ -235,7 +246,7 @@ if __name__ == '__main__':
     '''
 
     revert_list = single_link_list()
-    revert_list.create_instance(2)
+    revert_list.create_instance(100)
     print(revert_list)
-    revert_list.revert_instance()
+    revert_list.revert_instance2()
     print(revert_list)
