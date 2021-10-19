@@ -77,7 +77,7 @@ def tax_calculate_per_month_old(month_index, income_per_month_list, exemption, a
         ratio_month_index = 'large_80000'
 
     ls = tax_ratio_dict_month[ratio_month_index]
-    # 该月应缴纳个税 = 该月实际应税收入 * 税率 - 速算扣除数
+    # 该月应缴纳个税 = 该月实际应税收入 * 税率 - 速算扣除数 
     tax_this_month = income_this_month * ls[0] - ls[1]
     print("Month:{},Month income:{},Month income before tax:{},tax ratio:{},tax deduction:{},tax:{:.2f}".format\
               (month_index,income_per_month_list[month_index],income_this_month,ls[0],ls[1],tax_this_month))
@@ -125,7 +125,7 @@ def tax_calculate_per_month_new(month_index, income_per_month_list, exemption, a
         tax = income_to_calc_tax * ls[0] - ls[1] - tax_already_sumbit
     print("Month:{},total income:{},total income before tax:{},tax ratio:{},tax deduction:{},tax:{:.2f},tax_already_submit:{:.2f}".format\
               (month_index,total_income_untill_this_month,income_to_calc_tax,ls[0],ls[1],tax, tax_already_sumbit))
-    return tax
+    return tax 
 
 if __name__ == "__main__":
     main()
