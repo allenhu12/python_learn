@@ -13,16 +13,17 @@ income_per_month_list=[0]
 ratio_year_index=''
 ratio_month_index='' 
 
-tax_ratio_dict_year = {'less_60000':[0.03,0],
-                  'large_60000_less_144000':[0.1,2520],
+# 下面两个年税率表和月税率表均针对应纳税额来查表
+tax_ratio_dict_year = {'less_36000':[0.03,0],
+                  'large_36000_less_144000':[0.1,2520],
                   'large_144000_less_300000':[0.2,16920],
                   'large_300000_less_420000':[0.25,31920],
                   'large_420000_less_660000':[0.3,52920],
                   'large_660000_less_960000':[0.35,85920],
                   'large_960000':[0.45,181920]}
 
-tax_ratio_dict_month = {'less_5000':[0.03,0],
-                  'large_5000_less_12000':[0.1,210],
+tax_ratio_dict_month = {'less_3000':[0.03,0],
+                  'large_3000_less_12000':[0.1,210],
                   'large_12000_less_25000':[0.2,1410],
                   'large_25000_less_35000':[0.25,2660],
                   'large_35000_less_55000':[0.3,4410],
@@ -61,10 +62,10 @@ def main():
 
 def tax_calculate_per_month_old(month_index, income_per_month_list, exemption, additional_deduct_per_month):
     income_this_month = income_per_month_list[month_index] - exemption - additional_deduct_per_month
-    if income_this_month <= 5000:
-        ratio_month_index = 'less_5000'
-    elif income_this_month > 5000 and income_this_month <= 12000:
-        ratio_month_index = 'large_5000_less_12000'
+    if income_this_month <= 3000:
+        ratio_month_index = 'less_3000'
+    elif income_this_month > 3000 and income_this_month <= 12000:
+        ratio_month_index = 'large_3000_less_12000'
     elif income_this_month > 12000 and income_this_month <= 25000:
         ratio_month_index = 'large_12000_less_25000'
     elif income_this_month > 25000 and income_this_month <= 35000:
@@ -101,10 +102,10 @@ def tax_calculate_per_month_new(month_index, income_per_month_list, exemption, a
         i += 1
     # 该月应缴纳税费都是使用到这个月为止的收入总额 - 专项扣除总额 - 额外专项扣除总额，所以需要*month_index
     income_to_calc_tax = total_income_untill_this_month - exemption*month_index - additional_deduct_per_month*month_index
-    if income_to_calc_tax <= 60000:
-        ratio_year_index = 'less_60000'
-    elif income_to_calc_tax > 60000 and income_to_calc_tax <= 144000:
-        ratio_year_index = 'large_60000_less_144000'
+    if income_to_calc_tax <= 36000:
+        ratio_year_index = 'less_36000'
+    elif income_to_calc_tax > 36000 and income_to_calc_tax <= 144000:
+        ratio_year_index = 'large_36000_less_144000'
     elif income_to_calc_tax > 144000 and income_to_calc_tax <= 300000:
         ratio_year_index = 'large_144000_less_300000'
     elif income_to_calc_tax > 300000 and income_to_calc_tax <= 420000:
