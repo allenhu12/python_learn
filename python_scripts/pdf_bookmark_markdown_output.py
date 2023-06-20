@@ -1,4 +1,3 @@
-import re
 import fitz
 
 def get_bookmarks(bookmarks, indent_level=0):
@@ -7,8 +6,9 @@ def get_bookmarks(bookmarks, indent_level=0):
     for bookmark in bookmarks:
         if isinstance(bookmark, list):
             # Case 1: Bookmark is a list
+            level = bookmark[0] # Bookmark level
             title = bookmark[1]
-            page_number = bookmark[0] + 1  # Page numbers start from 0, add 1 to start from 1
+            page_number = bookmark[2]  # Page numbers start from 0, add 1 to start from 1
         elif isinstance(bookmark, dict):
             # Case 2: Bookmark is a dictionary
             title = bookmark["title"]
@@ -18,19 +18,11 @@ def get_bookmarks(bookmarks, indent_level=0):
             continue
 
         # Add indentation to represent the hierarchical structure
-        indent = "    " * indent_level
+        indent = "  " * level
+        title = title.replace('\r', ' ')
 
-        # Check if the line has numbering format "X." or "X.Y" using regex
-        match = re.match(r"^(\d+(\.\d+)*)\.\s(.+)$", title)
-        if match:
-            numbering = match.group(1)  # Extract the numbering format
-            num_segments = numbering.count('.') + 1  # Count the number of segments in the numbering format
-
-            # Generate the Markdown format for the bookmark with appropriate number of hashtags
-            markdown_content += f"{indent}- {'#' * (num_segments + indent_level)} {title}(#{page_number})\n"
-        else:
-            # Generate the Markdown format for the bookmark without any additional hashtags
-            markdown_content += f"{indent}- {title}(#{page_number})\n"
+        # Generate the Markdown format for the bookmark
+        markdown_content += f"{indent} [{title}](#{page_number})\n"
 
         # Recursively process child bookmarks
         if "children" in bookmark:
@@ -47,6 +39,6 @@ def pdf_bookmarks_to_markdown(file_path):
     return markdown_content
 
 # Usage example
-pdf_path = "/Users/hubo/Downloads/Traffic-Control-HOWTO.pdf"  # Replace with the actual path of your PDF file
+pdf_path = "/Users/hubo/Library/CloudStorage/Nutstore-allenhu12@qq.com/300-LEARN/wireshark参考书/Mastering Wireshark.pdf"  # Replace with the actual path of your PDF file
 markdown_content = pdf_bookmarks_to_markdown(pdf_path)
 print(markdown_content)

@@ -9,8 +9,9 @@ def get_bookmarks(bookmarks, indent_level=0):
     for bookmark in bookmarks:
         if isinstance(bookmark, list):
             # Case 1: Bookmark is a list
+            level = bookmark[0] # Bookmark level
             title = bookmark[1]
-            page_number = bookmark[0] + 1  # Page numbers start from 0, add 1 to start from 1
+            page_number = bookmark[2]   # Page numbers start from 0, add 1 to start from 1
         elif isinstance(bookmark, dict):
             # Case 2: Bookmark is a dictionary
             title = bookmark["title"]
@@ -20,8 +21,10 @@ def get_bookmarks(bookmarks, indent_level=0):
             continue
 
         # Add indentation to represent the hierarchical structure
-        indent = "    " * indent_level
+        indent = "    " * level
+        title = title.replace('\r', ' ')
 
+        """
         # Check if the line has numbering format "X." or "X.Y" using regex
         match = re.match(r"^(\d+(\.\d+)*)\.\s(.+)$", title)
         if match:
@@ -33,6 +36,9 @@ def get_bookmarks(bookmarks, indent_level=0):
         else:
             # Generate the Markdown format for the bookmark without any additional hashtags
             markdown_content += f"{indent}- {title}(#{page_number})\n"
+        """
+        # Generate the Markdown format for the bookmark without any additional hashtags
+        markdown_content += f"{indent} {title}(#{page_number})\n"
 
         # Recursively process child bookmarks
         if "children" in bookmark:
